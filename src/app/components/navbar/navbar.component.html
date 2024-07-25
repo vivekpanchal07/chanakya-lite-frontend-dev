@@ -1,0 +1,25 @@
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="over" #drawer>
+    <mat-nav-list>
+      <a mat-list-item (click)="goToPasswordManager()">
+        <mat-icon matListItemIcon>lock</mat-icon>
+        <span mat-line>Password Manager</span>
+      </a>
+      <!-- Add more navigation items as needed -->
+    </mat-nav-list>
+  </mat-drawer>
+  <mat-drawer-content style="height: 100vh;">
+    <mat-toolbar>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon> 
+        <!-- it will get replaced by the icon of the application and also it will act as trigger to open the apps page -->
+      </button>
+      <span>Password Manager</span> <!-- it will get replaced by Apps name based on app that are being used by the user. -->
+      <span class="navbar-spacer"></span>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+        <mat-icon>share</mat-icon>
+      </button>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
