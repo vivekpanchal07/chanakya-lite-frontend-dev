@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-sign-in',
@@ -22,7 +23,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
+  providers: [AuthService],
 })
 export class SignInComponent implements OnInit {
   signInForm!: FormGroup;
@@ -68,6 +71,14 @@ export class SignInComponent implements OnInit {
   }
   
   onSubmit() {
-    this.authService.login(this.signInForm.value);
+    console.log("ts triggered")
+    this.authService.login(this.signInForm.value)
+      .subscribe(
+        (res) => {
+          console.log("login successful");
+          this.router.navigate(['password-manager']);
+        },
+        err => console.log("error",err)
+      )
   }
 }
