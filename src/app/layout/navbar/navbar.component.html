@@ -1,0 +1,80 @@
+<mat-toolbar>
+  <!-- Left button for a different purpose -->
+  <button mat-icon-button class="example-icon" aria-label="Left menu icon">
+    <mat-icon>apps</mat-icon>
+  </button>
+
+  <span>{{ title }}</span>
+
+  <div class="d-none d-lg-block">
+  <!-- Dynamic Menu Items for larger screens -->
+  <ng-container *ngFor="let item of menuItems">
+    <!-- Non-dropdown item -->
+    <button *ngIf="!item.dropdownItems" mat-button [routerLink]="item.link">{{ item.label }}</button>
+
+    <!-- Dropdown item -->
+    <ng-container *ngIf="item.dropdownItems">
+      <button mat-button [matMenuTriggerFor]="menu">{{ item.label }} ▼</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let subItem of item.dropdownItems" [routerLink]="subItem.link">
+          {{ subItem.label }}
+        </button>
+      </mat-menu>
+    </ng-container>
+  </ng-container>
+  </div>
+
+  <!-- Spacer -->
+  <span class="navbar-spacer"></span>
+
+  <!-- Sidebar toggle button for mobile view -->
+  
+    <img class="d-lg-none me-2" src="assets/icons/sidebar.png" (click)="toggleSidebar()" alt="menu" width="20" height="20"/>
+    <!-- <mat-icon>menu</mat-icon> -->
+
+  <img src="assets/profile-photo.jpg" [matMenuTriggerFor]="profileMenu" alt="User Profile" class="profile-photo">
+  
+</mat-toolbar>
+
+<mat-menu #profileMenu="matMenu" class="profile-menu">
+  <div class="profile-menu-header">
+    <img src="assets/profile-photo.jpg" alt="User Profile" class="profile-photo-menu">
+    <div class="profile-name">{{ userName }}</div>
+  </div>
+  <mat-divider></mat-divider> <!-- Separator -->
+  <button mat-menu-item [routerLink]="['/profile']">
+    <mat-icon>person</mat-icon>
+    <span>Profile</span>
+  </button>
+  <button mat-menu-item [routerLink]="['/settings']">
+    <mat-icon>settings</mat-icon>
+    <span>Settings</span>
+  </button>
+  <mat-divider></mat-divider> <!-- Separator -->
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>
+
+<!-- Sidebar for mobile view -->
+<div class="sidebar d-lg-none" [ngClass]="{'open': isSidebarOpen}">
+  <!-- Close button inside the sidebar -->
+  <button class="sidebar-close" (click)="toggleSidebar()" aria-label="Close sidebar">
+    <mat-icon>close</mat-icon>
+  </button>
+  <ng-container *ngFor="let item of menuItems">
+    <a *ngIf="!item.dropdownItems" [routerLink]="item.link" class="sidebar-item" (click)="toggleSidebar()">
+      {{ item.label }}
+    </a>
+    <div *ngIf="item.dropdownItems" class="sidebar-dropdown">
+      <div class="sidebar-dropdown-label">{{ item.label }}</div>
+      <div *ngFor="let subItem of item.dropdownItems" class="sidebar-dropdown-item">
+        <a [routerLink]="subItem.link" (click)="toggleSidebar()">{{ subItem.label }}</a>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Overlay to close sidebar on click outside -->
+<div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>

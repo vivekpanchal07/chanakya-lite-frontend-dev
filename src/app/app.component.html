@@ -1,1 +1,3 @@
-<router-outlet />
+<!-- app.component.html -->
+<app-navbar *ngIf="auth()" [title]="title" [menuItems]="menuItems"></app-navbar>
+<router-outlet (activate)="updateNavbar($event)"></router-outlet>

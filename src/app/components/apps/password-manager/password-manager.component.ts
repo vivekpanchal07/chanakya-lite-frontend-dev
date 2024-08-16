@@ -10,6 +10,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPasswordDialogComponent } from './add-password-dialog/add-password-dialog.component';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-password-manager',
@@ -23,18 +24,31 @@ import { AddPasswordDialogComponent } from './add-password-dialog/add-password-d
     MatInputModule,
     MatButtonModule,
   ],
-  providers: [PasswordManagerService],
+  providers: [PasswordManagerService, NavbarService],
   templateUrl: './password-manager.component.html',
   styleUrl: './password-manager.component.css'
 })
 export class PasswordManagerComponent implements OnInit{
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   displayedColumns: string[] = ['name', 'password', 'website'];
-  constructor(private passwordService: PasswordManagerService, private dialog: MatDialog) {}
+  constructor(private passwordService: PasswordManagerService, 
+              private dialog: MatDialog,
+              private navbarService: NavbarService) {
+    this.navbarService.setTitle('Passcode');
+    this.navbarService.setMenuItems([
+      { label: 'Home', link: '/' },
+      {
+        label: 'Configuration',
+        dropdownItems: [
+          { label: 'Profile', link: '/profile' },
+          { label: 'Security', link: '/security' },
+        ]
+      }
+    ])
+  }
 
   ngOnInit(): void {
     this.passwordService.getPasswords().subscribe((passwords) => {
-        // this.passwords = passwords; // Update the data source
         this.dataSource.data = passwords;
     });
   }
